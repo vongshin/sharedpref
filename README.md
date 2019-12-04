@@ -23,10 +23,11 @@ public interface AppConfig {
     void setName(String name);
 }
 ```
-######接口定义说明：@SharedPres用于设置命名(name)和模式(mode)
-######@BooleanAttr @IntAttr @LongAttr @FloatAttr @StringAttr @StringSetAttr 用于配置key defValue
-######方法定义 1：T name(T... value); 入参是可变参数，调用时，不填表示获取，填则表示保存
-######方法定义 2：Preference<T> name(); 获取Preference对象进行操作
+- 接口定义说明：<code>@SharedPres</code>用于设置命名(name)和模式(mode)
+- <code>@BooleanAttr @IntAttr @LongAttr @FloatAttr @StringAttr @StringSetAttr</code> 用于配置key defValue
+- 方法定义
+   - <code>T name(T... value);</code> 入参是可变参数，调用时，不填表示获取，填则表示保存
+   - <code>Preference<T> name();</code> 获取Preference对象进行操作
 
 
 ### step 2 生成接口实例，调用
