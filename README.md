@@ -13,6 +13,8 @@ public interface AppConfig {
     @StringAttr(value = "jake", key = "name")
     Preference<String> name();
 
+    Preference<String> password();
+    
     @StringAttr(value = "jake")
     String name(String... value);
     
@@ -24,7 +26,7 @@ public interface AppConfig {
 }
 ```
 - 接口定义说明：<code>@SharedPres</code>用于配置命名(name)和模式(mode)
-- <code>@BooleanAttr @IntAttr @LongAttr @FloatAttr @StringAttr @StringSetAttr</code> 用于配置key defValue
+- <code>key默认使用方法名 @BooleanAttr @IntAttr @LongAttr @FloatAttr @StringAttr @StringSetAttr</code> 用于配置key defValue
 - 方法定义
    - <code>T name(T... value);</code> 入参是可变参数，调用时，不填表示获取，填则表示保存
    - <code>Preference<T> name();</code> 获取Preference对象进行操作
