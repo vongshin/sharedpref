@@ -1,4 +1,4 @@
-package com.yellowhing.sharedprefs.annotation;
+package de.yellowhing.sharedprefs.annotation;
 
 import java.lang.annotation.*;
 

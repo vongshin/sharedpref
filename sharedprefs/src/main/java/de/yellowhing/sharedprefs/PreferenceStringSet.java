@@ -1,4 +1,4 @@
-package com.yellowhing.sharedprefs;
+package de.yellowhing.sharedprefs;
 
 import android.content.SharedPreferences;
 

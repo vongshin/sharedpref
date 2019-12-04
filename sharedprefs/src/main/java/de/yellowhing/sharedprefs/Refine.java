@@ -1,18 +1,18 @@
-package com.yellowhing.sharedprefs;
+package de.yellowhing.sharedprefs;
 
 import android.app.AppGlobals;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Pair;
-import com.yellowhing.sharedprefs.annotation.BooleanAttr;
-import com.yellowhing.sharedprefs.annotation.FloatAttr;
-import com.yellowhing.sharedprefs.annotation.IntAttr;
-import com.yellowhing.sharedprefs.annotation.LongAttr;
-import com.yellowhing.sharedprefs.annotation.SharedPres;
-import com.yellowhing.sharedprefs.annotation.StringSetAttr;
-import com.yellowhing.sharedprefs.annotation.StringAttr;
+import de.yellowhing.sharedprefs.annotation.BooleanAttr;
+import de.yellowhing.sharedprefs.annotation.FloatAttr;
+import de.yellowhing.sharedprefs.annotation.IntAttr;
+import de.yellowhing.sharedprefs.annotation.LongAttr;
+import de.yellowhing.sharedprefs.annotation.SharedPres;
+import de.yellowhing.sharedprefs.annotation.StringSetAttr;
+import de.yellowhing.sharedprefs.annotation.StringAttr;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;

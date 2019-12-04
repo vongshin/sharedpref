@@ -1,4 +1,4 @@
-package com.yellowhing.sharedprefs;
+package de.yellowhing.sharedprefs;
 
 import android.content.SharedPreferences;
 
@@ -6,24 +6,24 @@ import android.content.SharedPreferences;
  * @author huangxingzhan
  * @date 2019/11/8
  */
-class PreferenceFloat implements Preference<Float> {
+class PreferenceString implements Preference<String> {
     private SharedPreferences sharedPreferences;
     private String key;
-    private Float defaultValue;
-    public PreferenceFloat(SharedPreferences sharedPreferences, String key, Float defaultValue) {
+    private String defaultValue;
+    public PreferenceString(SharedPreferences sharedPreferences, String key, String defaultValue) {
         this.sharedPreferences = sharedPreferences;
         this.key = key;
         this.defaultValue = defaultValue;
     }
 
     @Override
-    public Float getValue() {
-        return sharedPreferences.getFloat(key, defaultValue);
+    public String getValue() {
+        return sharedPreferences.getString(key, defaultValue);
     }
 
     @Override
-    public void setValue(Float v) {
-        sharedPreferences.edit().putFloat(key, v).apply();
+    public void setValue(String v) {
+        sharedPreferences.edit().putString(key, v).apply();
     }
 
     @Override

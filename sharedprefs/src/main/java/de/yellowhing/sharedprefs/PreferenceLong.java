@@ -1,4 +1,4 @@
-package com.yellowhing.sharedprefs;
+package de.yellowhing.sharedprefs;
 
 import android.content.SharedPreferences;
 
@@ -6,24 +6,24 @@ import android.content.SharedPreferences;
  * @author huangxingzhan
  * @date 2019/11/8
  */
-class PreferenceString implements Preference<String> {
+class PreferenceLong implements Preference<Long> {
     private SharedPreferences sharedPreferences;
     private String key;
-    private String defaultValue;
-    public PreferenceString(SharedPreferences sharedPreferences, String key, String defaultValue) {
+    private Long defaultValue;
+    public PreferenceLong(SharedPreferences sharedPreferences, String key, Long defaultValue) {
         this.sharedPreferences = sharedPreferences;
         this.key = key;
         this.defaultValue = defaultValue;
     }
 
     @Override
-    public String getValue() {
-        return sharedPreferences.getString(key, defaultValue);
+    public Long getValue() {
+        return sharedPreferences.getLong(key, defaultValue);
     }
 
     @Override
-    public void setValue(String v) {
-        sharedPreferences.edit().putString(key, v).apply();
+    public void setValue(Long v) {
+        sharedPreferences.edit().putLong(key, v).apply();
     }
 
     @Override
