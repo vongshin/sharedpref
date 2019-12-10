@@ -2,7 +2,7 @@
 ## 简化使用sharedpreferences
 
 ```java
- implementation 'de.yellowhing.sharedprefs:sharedprefs:0.0.3'
+ implementation 'de.yellowhing.sharedprefs:sharedprefs:0.0.4'
 ```
 
 ### step 1 定义接口配置
@@ -34,7 +34,7 @@ public interface AppConfig {
 
 ### step 2 生成接口实例，调用
 ```java
-AppConfig config = Refine.create(AppConfig.class);
+AppConfig config = Refine.create(AppConfig.class, Context context);
 // get name by Preference
 config.name().getValue();
 //get name

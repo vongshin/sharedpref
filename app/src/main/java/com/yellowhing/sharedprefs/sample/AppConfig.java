@@ -1,8 +1,8 @@
 package com.yellowhing.sharedprefs.sample;
 
-import com.yellowhing.sharedprefs.Preference;
-import com.yellowhing.sharedprefs.annotation.SharedPres;
-import com.yellowhing.sharedprefs.annotation.StringAttr;
+import de.yellowhing.sharedprefs.Preference;
+import de.yellowhing.sharedprefs.annotation.SharedPres;
+import de.yellowhing.sharedprefs.annotation.StringAttr;
 
 /**
  * @author huangxingzhan
@@ -10,15 +10,8 @@ import com.yellowhing.sharedprefs.annotation.StringAttr;
  */
 @SharedPres("app_config")
 public interface AppConfig {
-    int age(int... age);
 
-    String name(String... name);
-
-    float money(float... money);
-
-    long value(long... value);
-
-    @StringAttr("123456")
+    @StringAttr(value = "123456", key = "login_pwd")
     Preference<String> password();
 
     String info();

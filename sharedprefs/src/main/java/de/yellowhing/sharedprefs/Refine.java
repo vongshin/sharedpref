@@ -1,6 +1,5 @@
 package de.yellowhing.sharedprefs;
 
-import android.app.AppGlobals;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
@@ -12,13 +11,16 @@ import de.yellowhing.sharedprefs.annotation.LongAttr;
 import de.yellowhing.sharedprefs.annotation.SharedPres;
 import de.yellowhing.sharedprefs.annotation.StringSetAttr;
 import de.yellowhing.sharedprefs.annotation.StringAttr;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author huangxingzhan
@@ -32,7 +34,7 @@ public class Refine {
     public final static String STRING_DEF_VALUE = "";
     public final static String[] STRINGS_DEF_VALUE = {};
 
-    public static <T> T create(Class<T> tClass) {
+    public static <T> T create(Class<T> tClass, Context context) {
         final SharedPres sharedPres = tClass.getAnnotation(SharedPres.class);
         String name = tClass.getSimpleName();
         int mode = Context.MODE_PRIVATE;
@@ -40,7 +42,7 @@ public class Refine {
             name = sharedPres.value();
             mode = sharedPres.mode();
         }
-        Object object = Proxy.newProxyInstance(tClass.getClassLoader(), new Class[]{tClass}, new AbstractInvocationHandler(name, mode) {
+        Object object = Proxy.newProxyInstance(tClass.getClassLoader(), new Class[]{tClass}, new AbstractInvocationHandler(name, mode, context) {
             @Override
             public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
                 return parse(method, args);
@@ -52,8 +54,8 @@ public class Refine {
     static abstract class AbstractInvocationHandler implements InvocationHandler {
         SharedPreferences sharedPreferences = null;
         static Map<Method, Preference> sPreferenceCache = new HashMap<>();
-        AbstractInvocationHandler(String name, int mode) {
-            sharedPreferences = AppGlobals.getInitialApplication().getSharedPreferences(name, mode);
+        AbstractInvocationHandler(String name, int mode, Context context) {
+            sharedPreferences = context.getSharedPreferences(name, mode);
         }
         private Object parseInt(Method method, Object[] args){
             IntAttr intAttr = method.getAnnotation(IntAttr.class);
