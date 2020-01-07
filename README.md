@@ -8,7 +8,7 @@
 ### step 1 定义接口配置
 
 ```java
-@SharedPres(value = "app_config", mode = Context.MODE_PRIVATE)
+@SharedPrefs(value = "app_config", mode = Context.MODE_PRIVATE)
 public interface AppConfig {
     @StringAttr(value = "jake", key = "name")
     Preference<String> name();
@@ -25,7 +25,7 @@ public interface AppConfig {
     void setName(String name);
 }
 ```
-- 接口定义说明：<code>@SharedPres</code>用于配置命名(name)和模式(mode)
+- 接口定义说明：<code>@SharedPrefs</code>用于配置命名(name)和模式(mode)
 - <code>key默认使用方法名 @BooleanAttr @IntAttr @LongAttr @FloatAttr @StringAttr @StringSetAttr</code> 用于配置key defValue
 - 方法定义
    - <code>T name(T... value);</code> 入参是可变参数，调用时，不填表示获取，填则表示保存
