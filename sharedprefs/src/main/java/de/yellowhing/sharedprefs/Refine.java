@@ -1,14 +1,18 @@
 package de.yellowhing.sharedprefs;
 
+import android.app.AppGlobals;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+
+import de.yellowhing.sharedprefs.annotation.Alias;
 import de.yellowhing.sharedprefs.annotation.BooleanAttr;
 import de.yellowhing.sharedprefs.annotation.FloatAttr;
 import de.yellowhing.sharedprefs.annotation.IntAttr;
 import de.yellowhing.sharedprefs.annotation.LongAttr;
-import de.yellowhing.sharedprefs.annotation.SharedPres;
+import de.yellowhing.sharedprefs.annotation.SharedPrefs;
 import de.yellowhing.sharedprefs.annotation.StringSetAttr;
 import de.yellowhing.sharedprefs.annotation.StringAttr;
 import java.lang.reflect.InvocationHandler;
@@ -34,9 +38,13 @@ public class Refine {
     public final static String STRING_DEF_VALUE = "";
     public final static String[] STRINGS_DEF_VALUE = {};
 
+    public static <T> T create(Class<T> tClass) {
+        return create(tClass, AppGlobals.getInitialApplication());
+    }
+
     public static <T> T create(Class<T> tClass, Context context) {
-        final SharedPres sharedPres = tClass.getAnnotation(SharedPres.class);
-        String name = tClass.getSimpleName();
+        final SharedPrefs sharedPres = tClass.getAnnotation(SharedPrefs.class);
+        String name = null;
         int mode = Context.MODE_PRIVATE;
         if (sharedPres != null) {
             name = sharedPres.value();
@@ -55,12 +63,19 @@ public class Refine {
         SharedPreferences sharedPreferences = null;
         static Map<Method, Preference> sPreferenceCache = new HashMap<>();
         AbstractInvocationHandler(String name, int mode, Context context) {
-            sharedPreferences = context.getSharedPreferences(name, mode);
+            if(TextUtils.isEmpty(name)){
+                sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            }else{
+                sharedPreferences = context.getSharedPreferences(name, mode);
+            }
+
         }
         private Object parseInt(Method method, Object[] args){
             IntAttr intAttr = method.getAnnotation(IntAttr.class);
             int defValue = intAttr == null ? INT_DEF_VALUE : intAttr.value();
-            String key = intAttr == null || TextUtils.isEmpty(intAttr.key()) ? method.getName() : intAttr.key();
+            Alias alias = method.getAnnotation(Alias.class);
+            String key = alias == null || TextUtils.isEmpty(alias.value()) ? method.getName() : alias.value();
+            key = intAttr == null || TextUtils.isEmpty(intAttr.key()) ? key : intAttr.key();
             if(args == null || args.length == 0){
                 return getInt(key, defValue);
             }else{
@@ -85,7 +100,9 @@ public class Refine {
         private Object parseLong(Method method, Object[] args){
             LongAttr longAttr = method.getAnnotation(LongAttr.class);
             long defValue = longAttr == null ? LONG_DEF_VALUE : longAttr.value();
-            String key = longAttr == null || TextUtils.isEmpty(longAttr.key()) ? method.getName() : longAttr.key();
+            Alias alias = method.getAnnotation(Alias.class);
+            String key = alias == null || TextUtils.isEmpty(alias.value()) ? method.getName() : alias.value();
+            key = longAttr == null || TextUtils.isEmpty(longAttr.key()) ? key : longAttr.key();
             if(args == null || args.length == 0){
                 return getLong(key, defValue);
             }else{
@@ -110,7 +127,9 @@ public class Refine {
         private Object parseBoolean(Method method, Object[] args){
             BooleanAttr booleanAttr = method.getAnnotation(BooleanAttr.class);
             boolean defValue = booleanAttr == null ? BOOLEAN_DEF_VALUE : booleanAttr.value();
-            String key = booleanAttr == null || TextUtils.isEmpty(booleanAttr.key()) ? method.getName() : booleanAttr.key();
+            Alias alias = method.getAnnotation(Alias.class);
+            String key = alias == null || TextUtils.isEmpty(alias.value()) ? method.getName() : alias.value();
+            key = booleanAttr == null || TextUtils.isEmpty(booleanAttr.key()) ? key : booleanAttr.key();
             if(args == null || args.length == 0){
                 return getBoolean(key, defValue);
             }else{
@@ -135,7 +154,9 @@ public class Refine {
         private Object parseFloat(Method method, Object[] args){
             FloatAttr floatAttr = method.getAnnotation(FloatAttr.class);
             float defValue = floatAttr == null ? FLOAT_DEF_VALUE : floatAttr.value();
-            String key = floatAttr == null || TextUtils.isEmpty(floatAttr.key()) ? method.getName() : floatAttr.key();
+            Alias alias = method.getAnnotation(Alias.class);
+            String key = alias == null || TextUtils.isEmpty(alias.value()) ? method.getName() : alias.value();
+            key = floatAttr == null || TextUtils.isEmpty(floatAttr.key()) ? key : floatAttr.key();
             if(args == null || args.length == 0){
                 return getFloat(key, defValue);
             }else{
@@ -160,7 +181,9 @@ public class Refine {
         private Object parseString(Method method, Object[] args){
             StringAttr stringAttr = method.getAnnotation(StringAttr.class);
             String defValue = stringAttr == null ? STRING_DEF_VALUE : stringAttr.value();
-            String key = stringAttr == null || TextUtils.isEmpty(stringAttr.key()) ? method.getName() : stringAttr.key();
+            Alias alias = method.getAnnotation(Alias.class);
+            String key = alias == null || TextUtils.isEmpty(alias.value()) ? method.getName() : alias.value();
+            key = stringAttr == null || TextUtils.isEmpty(stringAttr.key()) ? key : stringAttr.key();
             if(args == null || args.length == 0){
                 return getString(key, defValue);
             }else{
@@ -185,7 +208,9 @@ public class Refine {
         private Object parseStringSet(Method method, Object[] args){
             StringSetAttr stringSetAttr = method.getAnnotation(StringSetAttr.class);
             String[] defValue = stringSetAttr == null ? STRINGS_DEF_VALUE : stringSetAttr.value();
-            String key = stringSetAttr == null || TextUtils.isEmpty(stringSetAttr.key()) ? method.getName() : stringSetAttr.key();
+            Alias alias = method.getAnnotation(Alias.class);
+            String key = alias == null || TextUtils.isEmpty(alias.value()) ? method.getName() : alias.value();
+            key = stringSetAttr == null || TextUtils.isEmpty(stringSetAttr.key()) ? key : stringSetAttr.key();
             if(args == null || args.length == 0){
                 return getStringSet(key, new HashSet<>(Arrays.asList(defValue)));
             }else{
@@ -235,30 +260,38 @@ public class Refine {
                 ParameterizedType genType = (ParameterizedType)type;
                 Type[] types = genType.getActualTypeArguments();
                 final Type ct= types[0];
+                Alias alias = method.getAnnotation(Alias.class);
+                String key = alias == null || TextUtils.isEmpty(alias.value()) ? method.getName() : alias.value();
                 if (Boolean.class.equals(ct)) {
                     BooleanAttr booleanAttr = method.getAnnotation(BooleanAttr.class);
                     boolean defValue = booleanAttr == null ? BOOLEAN_DEF_VALUE : booleanAttr.value();
-                    preference = new PreferenceBoolean(sharedPreferences, method.getName(), defValue);
+                    key = booleanAttr == null || TextUtils.isEmpty(booleanAttr.key()) ? key : booleanAttr.key();
+                    preference = new PreferenceBoolean(sharedPreferences, key, defValue);
                 } else if (Integer.class.equals(ct)) {
                     IntAttr intAttr = method.getAnnotation(IntAttr.class);
                     int defValue = intAttr == null ? INT_DEF_VALUE : intAttr.value();
-                    preference = new PreferenceInt(sharedPreferences, method.getName(), defValue);
+                    key = intAttr == null || TextUtils.isEmpty(intAttr.key()) ? key : intAttr.key();
+                    preference = new PreferenceInt(sharedPreferences, key, defValue);
                 } else if (Long.class.equals(ct)) {
                     LongAttr longAttr = method.getAnnotation(LongAttr.class);
                     long defValue = longAttr == null ? LONG_DEF_VALUE : longAttr.value();
-                    preference = new PreferenceLong(sharedPreferences, method.getName(), defValue);
+                    key = longAttr == null || TextUtils.isEmpty(longAttr.key()) ? key : longAttr.key();
+                    preference = new PreferenceLong(sharedPreferences, key, defValue);
                 } else if (Float.class.equals(ct)) {
-                    FloatAttr floatValue = method.getAnnotation(FloatAttr.class);
-                    float defValue = floatValue == null ? FLOAT_DEF_VALUE : floatValue.value();
-                    preference = new PreferenceFloat(sharedPreferences, method.getName(), defValue);
+                    FloatAttr floatAttr = method.getAnnotation(FloatAttr.class);
+                    float defValue = floatAttr == null ? FLOAT_DEF_VALUE : floatAttr.value();
+                    key = floatAttr == null || TextUtils.isEmpty(floatAttr.key()) ? key : floatAttr.key();
+                    preference = new PreferenceFloat(sharedPreferences, key, defValue);
                 } else if (String.class.equals(ct)) {
-                    StringAttr stringValue = method.getAnnotation(StringAttr.class);
-                    final String defValue = stringValue == null ? STRING_DEF_VALUE : stringValue.value();
-                    preference = new PreferenceString(sharedPreferences, method.getName(), defValue);
+                    StringAttr stringAttr = method.getAnnotation(StringAttr.class);
+                    final String defValue = stringAttr == null ? STRING_DEF_VALUE : stringAttr.value();
+                    key = stringAttr == null || TextUtils.isEmpty(stringAttr.key()) ? key : stringAttr.key();
+                    preference = new PreferenceString(sharedPreferences, key, defValue);
                 }else if (Set.class.equals(ct)) {
-                    StringSetAttr stringSetValue = method.getAnnotation(StringSetAttr.class);
-                    final String[] defValue = stringSetValue == null ? STRINGS_DEF_VALUE : stringSetValue.value();
-                    preference = new PreferenceStringSet(sharedPreferences, method.getName(), new HashSet<>(Arrays.asList(defValue)));
+                    StringSetAttr stringSetAttr = method.getAnnotation(StringSetAttr.class);
+                    final String[] defValue = stringSetAttr == null ? STRINGS_DEF_VALUE : stringSetAttr.value();
+                    key = stringSetAttr == null || TextUtils.isEmpty(stringSetAttr.key()) ? key : stringSetAttr.key();
+                    preference = new PreferenceStringSet(sharedPreferences, key, new HashSet<>(Arrays.asList(defValue)));
                 }else{
                     throw new UnsupportedOperationException();
                 }

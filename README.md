@@ -2,7 +2,7 @@
 ## 简化使用sharedpreferences
 
 ```java
- implementation 'de.yellowhing.sharedprefs:sharedprefs:0.0.4'
+ implementation 'de.yellowhing.sharedprefs:sharedprefs:0.0.8'
 ```
 
 ### step 1 定义接口配置
